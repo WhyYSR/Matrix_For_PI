@@ -1,0 +1,186 @@
+{
+  "menu": {
+    "coefficients_matrix": {
+      "en": "Coefficient matrix:",
+      "ru": "Матрица коэффициентов:"
+    },
+    "constants_vector": {
+      "en": "Constants vector:",
+      "ru": "Вектор констант:"
+    },
+    "final_solve": {
+      "en": "Solution of the system of equations",
+      "ru": "Решение системы уравнений"
+    },
+    "solve_system": {
+      "en": "Solve System",
+      "ru": "Решить систему"
+    },
+    "history": {
+      "en": "History",
+      "ru": "История"
+    },
+    "settings": {
+      "en": "Settings",
+      "ru": "Настройки"
+    },
+    "exit": {
+      "en": "Exit",
+      "ru": "Выход"
+    }
+  },
+  "messages": {
+    "solution": {
+      "en": "Solution",
+      "ru": "Решение"
+    },
+    "non_square_matrix_gauss": {
+      "en": "The matrix is not square, therefore it does not have a clear solution by the Gaussian method.",
+      "ru": "Матрица не квадратная, следовательно, не имеет четкого решения по методу Гаусса"
+    },
+    "matrix_linearly_dependent": {
+      "en": "The matrix is linearly dependent and therefore not square.",
+      "ru": "Матрица является линейно зависимой и следовательно не является квадратной"
+    },
+    "matrix_size": {
+      "en": "Matrix size should be between 2 and 5 inclusive",
+      "ru": "Размер матрицы должен быть от 2 до 5 включительно"
+    },
+    "error": {
+      "en": "Error",
+      "ru": "Ошибка"
+    },
+    "invalid_input": {
+      "en": "Please enter only numerical values.",
+      "ru": "Пожалуйста, введите только числовые значения."
+    }
+  },
+  "buttons": {
+    "settings": {
+      "en": "Settings",
+      "ru": "Настройки"
+    },
+    "save": {
+      "en": "Save",
+      "ru": "Сохранить"
+    },
+    "ok": {
+      "en": "OK",
+      "ru": "OK"
+    },
+    "back": {
+      "en": "Back",
+      "ru": "Назад"
+    },
+    "continue": {
+      "en": "Continue",
+      "ru": "Продолжить"
+    },
+    "clear": {
+      "en": "Clear",
+      "ru": "Очистить"
+    },
+    "exit": {
+      "en": "Exit",
+      "ru": "Выход"
+    },
+    "restart": {
+      "en": "Restart",
+      "ru": "В начало"
+    },
+    "history": {
+      "en": "History",
+      "ru": "История"
+    },
+    "confirm": {
+      "en": "Confirm",
+      "ru": "Подтвердить"
+    }
+  },
+  "labels": {
+    "fullscreen": {
+      "en": "Fullscreen",
+      "ru": "Полноэкранный"
+    },
+    "windowed": {
+      "en": "Windowed",
+      "ru": "Оконный"
+    },
+    "light": {
+      "en": "Light",
+      "ru": "Светлая"
+    },
+    "gauss": {
+      "en": "Gauss",
+      "ru": "Гаусс"
+    },
+    "dark": {
+      "en": "Dark",
+      "ru": "Тёмная"
+    },
+    "language": {
+      "en": "Choose Lanhuage",
+      "ru": "Выберите язык"
+    },
+    "choose_solution_method": {
+      "en": "Choose Solution Method",
+      "ru": "Выберите метод решения"
+    },
+    "round_to": {
+      "en": "Round to",
+      "ru": "Округлить до"
+    },
+    "choose_theme": {
+      "en": "Choose Theme",
+      "ru": "Выберите тему"
+    },
+    "fullscreen_mode": {
+      "en": "Fullscreen mode",
+      "ru": "Полноэкранный режим"
+    },
+    "choose_text_color": {
+      "en": "Choose text color",
+      "ru": "Выберите цвет текста"
+    },
+    "matrix_values": {
+      "en": "Enter matrix values",
+      "ru": "Введите значения матрицы"
+    },
+    "square_matrix_size": {
+      "en": "Square matrix size",
+      "ru": "Размер квадратной матрицы"
+    },
+    "solution": {
+      "en": "Solution",
+      "ru": "Решение"
+    },
+    "linear_system_solution": {
+      "en": "Linear System Solution",
+      "ru": "Решение линейной системы"
+    },
+    "method": {
+      "en": "Method",
+      "ru": "Метод"
+    },
+    "rounding": {
+      "en": "Rounding",
+      "ru": "Округление"
+    },
+    "solve_system": {
+      "en": "Solution of the system of equations",
+      "ru": "Решение системы уравнений"
+    },
+    "no": {
+      "en": "No",
+      "ru": "Нет"
+    },
+    "yes": {
+      "en": "Yes",
+      "ru": "да"
+    },
+    "theme": {
+      "en": "Theme",
+      "ru": "Тема"
+    }
+  }
+}

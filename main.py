@@ -1,5 +1,5 @@
 import flet as ft
-
+import json
 solution_history = []
 
 
@@ -19,7 +19,7 @@ def the_triangular_matrix(A, B, page):
     n = len(A)
 
     if len(A) != len(A[0]):
-        show_error_alert(page, "Матрица не квадратная, следовательно, не имеет четкого решения по методу Гаусса")
+        show_error_alert(page, translations['messages']['non_square_matrix_gauss'][page.leng])
         return None, None
 
     det = 1
@@ -51,7 +51,7 @@ def the_triangular_matrix(A, B, page):
 
     A_test = [row for row in A if any(abs(el) > epsilon for el in row)]
     if len(A) != len(A_test):
-        show_error_alert(page, "Матрица является линейно зависимой и следовательно не является квадратной")
+        show_error_alert(page, translations['messages']['matrix_linearly_dependent'][page.leng])
         return None, None
 
     return A, B
@@ -165,14 +165,14 @@ def solve_system(page, entries):
                 row_coefficients.append(float(entry.value))
             coefficients_matrix.append(row_coefficients)
             constants_vector.append(float(row[-1].value))
-        print("Матрица коэффициентов:", coefficients_matrix)
-        print("Вектор констант:", constants_vector)
+        print(f"{translations['menu']['coefficients_matrix'][page.leng]}:", coefficients_matrix)
+        print(f"{translations['menu']['constants_vector'][page.leng]}:", constants_vector)
         if page.method == 'gauss':
             A, B = the_triangular_matrix(coefficients_matrix, constants_vector, page)
             X = backward_substitution(A, B)
         else:
             X = solve_lu(coefficients_matrix, constants_vector)
-        print("Решение системы уравнений:", X)
+        print(f"{translations['menu']['final_solve'][page.leng]}:", X)
         for i in range(len(X)):
             X[i] = round(X[i], page.rounding)
         solution_history.append(X)
@@ -192,11 +192,11 @@ def create_matrix_input_page(page: ft.Page, size: int, entries):
     """
     page.controls.clear()
 
-    save_button = CustomButton("Продолжить", lambda e: solve_system(page, entries), page)
-    back_button = CustomButton('Назад', lambda e: create_dimension_selection_page(page), page)
-    clear_button = CustomButton('Очистить', lambda e: clear_matrix(page, entries), page)
+    save_button = CustomButton(translations['buttons']['confirm'][page.leng], lambda e: solve_system(page, entries), page)
+    back_button = CustomButton(translations['buttons']['back'][page.leng], lambda e: create_dimension_selection_page(page), page)
+    clear_button = CustomButton(translations['buttons']['clear'][page.leng], lambda e: clear_matrix(page, entries), page)
 
-    page.add(ft.Row([ft.Text("Введите значения матрицы",
+    page.add(ft.Row([ft.Text(translations['menu']['final_solve'][page.leng],
                              size=30,
                              color='black' if page.theme_mode == 'light' else 'purple')],
                     alignment=ft.MainAxisAlignment.CENTER))
@@ -216,6 +216,7 @@ def clear_matrix(page, entries):
     page.update()
 
 
+# noinspection PyTypeChecker
 def create_dimension_selection_page(page: ft.Page):
     """
     Создает страницу для выбора размера матрицы.
@@ -225,18 +226,18 @@ def create_dimension_selection_page(page: ft.Page):
     """
     page.controls.clear()
 
-    size_entry = ft.TextField(hint_text="Размер квадратной матрицы",
+    size_entry = ft.TextField(hint_text=translations['labels']['square_matrix_size'][page.leng],
                               hint_style=ft.TextStyle(color='black' if page.theme_mode == 'light' else 'yellow'),
                               text_align=ft.TextAlign.CENTER,
                               color='black' if page.theme_mode == 'light' else 'yellow',
                               width=600,
                               text_size=30)
-    submit_button = CustomButton("Подтвердить",
+    submit_button = CustomButton(translations['buttons']['confirm'][page.leng],
                                  lambda e: validate_and_create_matrix_input_page(page, size_entry.value),
                                  page,
                                  width=250,
                                  height=50)
-    setting_button = CustomButton('Настройки',
+    setting_button = CustomButton(translations['buttons']['settings'][page.leng],
                                   lambda e: create_settings_page(page),
                                   page,
                                   width=250,
@@ -261,11 +262,11 @@ def validate_and_create_matrix_input_page(page, size_value):
     try:
         size = int(size_value)
         if (2 <= size <= 5) == 0:
-            show_error_alert(page, "Размер матрицы должен быть 2 <= и <= 5")
+            show_error_alert(page, translations['messages']['matrix_size'][page.leng])
         else:
             create_matrix_input_page(page, size, create_entries(size, page))
     except ValueError:
-        show_error_alert(page, "Пожалуйста, введите числовое значение для размера матрицы")
+        show_error_alert(page, translations['messages']['matrix_size'][page.leng])
 
 
 def create_entries(size, page):
@@ -319,7 +320,7 @@ def show_invalid_input_alert(page):
     Возвращает:
     - None
     """
-    alert_message = "Пожалуйста, введите только числовые значения."
+    alert_message = translations['messages']['invalid_input'][page.leng]
     alert_dialog = ft.AlertDialog(
         title=ft.Text("Ошибка"),
         content=ft.Text(alert_message),
@@ -364,25 +365,25 @@ def show_solution_page(page: ft.Page, solution, entries):
                      color='black' if page.theme_mode == 'light' else 'green',
                      size=30)
 
-    back_button = CustomButton("Назад",
+    back_button = CustomButton(translations['buttons']['back'][page.leng],
                                lambda e: create_matrix_input_page(page, len(entries), entries),
                                page)
 
-    exit_button = CustomButton("Выход",
+    exit_button = CustomButton(translations['buttons']['exit'][page.leng],
                                lambda e: page.window_close(),
                                page)
 
-    restart_button = CustomButton("В начало",
+    restart_button = CustomButton(translations['buttons']['restart'][page.leng],
                                   lambda e: create_dimension_selection_page(page),
                                   page,
                                   width=150)
-    history_button = CustomButton("История решений",
+    history_button = CustomButton(translations['buttons']['history'][page.leng],
                                   lambda e: show_history_page(page, entries),
                                   page,
                                   width=150)
 
     page.add(ft.Column([
-         ft.Row([ft.Text('Решение системы уравнений:',
+         ft.Row([ft.Text(translations['labels']['solve_system'][page.leng],
                          color='black' if page.theme_mode == 'light' else 'purple',
                          size=35)],
                 alignment=ft.MainAxisAlignment.CENTER),
@@ -411,14 +412,14 @@ def show_history_page(page: ft.Page, entries):
     # Очищаем страницу
     page.controls.clear()
     for i, sol in enumerate(solution_history, start=1):
-        solution_text = ft.Row([ft.Text(f"Решение {i}: {sol}",
+        solution_text = ft.Row([ft.Text(f"{translations['messages']['solution'][page.leng]} {i}: {sol}",
                                         color='black' if page.theme_mode == 'light' else 'green',
                                         size=35)],
                                alignment=ft.MainAxisAlignment.CENTER)
         page.add(solution_text)
 
         # Добавляем кнопку для возврата на предыдущую страницу
-    back_button = CustomButton("Назад",
+    back_button = CustomButton(translations['buttons']['back'][page.leng],
                                lambda e: create_matrix_input_page(page, len(entries), entries),
                                page)
     page.add(ft.Row([back_button], alignment=ft.MainAxisAlignment.CENTER))
@@ -431,7 +432,7 @@ def show_error_alert(page, message):
        page (страница, на которой отображается сообщение об ошибке)
        и message (текст сообщения об ошибке)."""
     alert_dialog = ft.AlertDialog(
-        title=ft.Text("Ошибка"),
+        title=ft.Text(translations['messages']['error'][page.leng]),
         content=ft.Text(message),
         actions=[ft.TextButton("OK", on_click=lambda e: close_dialog(page))],
         actions_alignment=ft.MainAxisAlignment.END,
@@ -453,8 +454,16 @@ def create_settings_page(page: ft.Page):
     - None
     """
     page.controls.clear()
-
     page.add(ft.Text('\n\n\n\n\n\n\n\n\n\n\n'))
+
+    language_dropdown = ft.Dropdown(
+        options=[
+            ft.dropdown.Option('Русский'),
+            ft.dropdown.Option('English')
+        ],
+        hint_text=translations['labels']['language'][page.leng],
+        on_change=lambda e: change_language(page, translations, language_dropdown.value)
+    )
 
     color_dropdown = ft.Dropdown(
         options=[
@@ -463,25 +472,25 @@ def create_settings_page(page: ft.Page):
             ft.dropdown.Option('Green'),
             ft.dropdown.Option('Black')
         ],
-        hint_text='Выберите цвет текста',
+        hint_text=translations['labels']['choose_text_color'][page.leng],
         on_change=lambda e: change_color(page, color_dropdown.value)
     )
 
     full_screen_dropdown = ft.Dropdown(
         options=[
-            ft.dropdown.Option('Нет'),
-            ft.dropdown.Option('Да')
+            ft.dropdown.Option(translations['labels']['yes'][page.leng]),
+            ft.dropdown.Option(translations['labels']['no'][page.leng])
         ],
-        hint_text='Полноэкранный режим',
+        hint_text=translations['labels']['fullscreen_mode'][page.leng],
         on_change=lambda e: change_full_screen_mode(page, full_screen_dropdown.value)
     )
 
     theme_dropdown = ft.Dropdown(
         options=[
-            ft.dropdown.Option('Light'),
-            ft.dropdown.Option('dark')
+            ft.dropdown.Option(translations['labels']['light'][page.leng]),
+            ft.dropdown.Option(translations['labels']['dark'][page.leng])
         ],
-        hint_text='Выберите тему',
+        hint_text=translations['labels']['choose_theme'][page.leng],
         on_change=lambda e: change_theme(page, theme_dropdown.value)
     )
 
@@ -493,24 +502,26 @@ def create_settings_page(page: ft.Page):
             ft.dropdown.Option('4'),
             ft.dropdown.Option('5')
         ],
-        hint_text='Округлять до',
+        hint_text=translations['labels']['round_to'][page.leng],
         on_change=lambda e: change_rounding(page, rounding_dropdown.value)
     )
 
     method_dropdown = ft.Dropdown(
         options=[
-            ft.dropdown.Option('Гаусс'),
+            ft.dropdown.Option(translations['labels']['gauss'][page.leng]),
             ft.dropdown.Option('LU')
         ],
-        hint_text='Выберите метод решения',
+        hint_text=translations['labels']['choose_solution_method'][page.leng],
         on_change=lambda e: change_method(page, method_dropdown.value)
     )
 
-    back_button = CustomButton("Назад", lambda e: create_dimension_selection_page(page), page)
+    back_button = CustomButton(translations['buttons']['back'][page.leng], lambda e: create_dimension_selection_page(page), page)
 
     page.add(ft.Column([ft.Row([theme_dropdown, full_screen_dropdown],
                                alignment=ft.MainAxisAlignment.CENTER),
                        ft.Row([rounding_dropdown, method_dropdown],
+                              alignment=ft.MainAxisAlignment.CENTER),
+                       ft.Row([language_dropdown],
                               alignment=ft.MainAxisAlignment.CENTER),
                        ft.Row([back_button],
                               alignment=ft.MainAxisAlignment.CENTER)],
@@ -530,7 +541,7 @@ def change_full_screen_mode(page: ft.Page, mode: str):
     Возвращает:
     - None
     """
-    if mode == 'Да':
+    if mode in translations['labels']['yes'].values():
         page.window_full_screen = True
     else:
         page.window_full_screen = False
@@ -563,12 +574,7 @@ def change_theme(page: ft.Page, theme: str):
     Возвращает:
     - None
     """
-    if theme.lower() == 'light':
-        page.theme_mode = 'light'
-    else:
-        page.theme_mode = 'dark'
-    page.update()
-    if theme.lower() == 'light':
+    if theme in translations['labels']['light'].values():
         page.theme_mode = 'light'
     else:
         page.theme_mode = 'dark'
@@ -601,12 +607,55 @@ def change_method(page: ft.Page, method: str):
     Возвращает:
     - None
     """
-    if method.lower() == 'гаусс':
+    if method in translations['labels']['gauss']:
         page.method = 'gauss'
     else:
         page.method = 'lu'
     page.update()
 
+
+def load_translations(file_path):
+    """
+    Загружает переводы из файла JSON.
+
+    Параметры:
+    - file_path: str, путь к файлу с переводами.
+
+    Возвращает:
+    - dict, словарь с переводами.
+    """
+    translations = {}
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            translations = json.load(file)
+    except FileNotFoundError:
+        print(f"Файл с переводами не найден: {file_path}")
+    except json.JSONDecodeError:
+        print(f"Ошибка декодирования JSON в файле: {file_path}")
+    return translations
+
+
+def change_language(page: ft.Page, translations, language):
+    """
+    Изменяет язык интерфейса.
+
+    Параметры:
+    - page: объект страницы для отображения
+    - translations: словарь с переводами
+    - language: выбранный язык
+
+    Возвращает:
+    - None
+    """
+    if language == 'English':
+        page.leng = 'en'
+    elif language == 'Русский':
+        page.leng = 'ru'
+    else:
+        # Если перевод для выбранного языка отсутствует, выводим сообщение об ошибке или используем язык по умолчанию
+        print("Translation not found for selected language.")
+
+    create_settings_page(page)
 
 class CustomButton(ft.TextButton):
     """
@@ -651,12 +700,17 @@ class CustomButton(ft.TextButton):
         self.page = page
 
 
+translations = load_translations("Translate.json")
+
+
 def main(page: ft.Page):
     """Это основная функция, которая запускает приложение.
     Она принимает один параметр: page (страница, на которой отображается приложение)."""
     page.window_maximized = True
+
     page.rounding = 3
     page.method = 'gauss'
+    page.leng = 'ru'
     solution_history = []
     create_dimension_selection_page(page)
 
