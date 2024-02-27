@@ -58,6 +58,16 @@ def the_triangular_matrix(A, B, page):
 
 
 def lu_decomposition(A):
+    """
+    Выполняет LU-разложение матрицы A.
+
+    Параметры:
+    - A: двумерный список (исходная матрица)
+
+    Возвращает:
+    - L: двумерный список (нижнетреугольная матрица L)
+    - U: двумерный список (верхнетреугольная матрица U)
+    """
     n = len(A)
     L = [[0.0] * n for _ in range(n)]  # Инициализация матрицы L нулями
     U = [[0.0] * n for _ in range(n)]  # Инициализация матрицы U нулями
@@ -78,6 +88,16 @@ def lu_decomposition(A):
 
 
 def forward_substitution(L, b):
+    """
+    Выполняет прямую подстановку.
+
+    Параметры:
+    - L: двумерный список (нижнетреугольная матрица L)
+    - b: список (столбец свободных членов)
+
+    Возвращает:
+    - y: список (результат прямой подстановки)
+    """
     n = len(L)
     y = [0.0] * n  # Инициализация вектора y нулями
     for i in range(n):
@@ -88,6 +108,16 @@ def forward_substitution(L, b):
 
 
 def backward_substitution(U, y):
+    """
+    Выполняет обратную подстановку.
+
+    Параметры:
+    - U: двумерный список (верхнетреугольная матрица U)
+    - y: список (результат прямой подстановки)
+
+    Возвращает:
+    - x: список (решение системы уравнений)
+    """
     n = len(U)
     x = [0.0] * n  # Инициализация вектора x нулями
     for i in range(n - 1, -1, -1):
@@ -99,6 +129,16 @@ def backward_substitution(U, y):
 
 
 def solve_lu(A, b):
+    """
+    Решает систему линейных уравнений методом LU-разложения.
+
+    Параметры:
+    - A: двумерный список (матрица коэффициентов системы уравнений)
+    - b: список (столбец свободных членов)
+
+    Возвращает:
+    - x: список (решение системы уравнений)
+    """
     L, U = lu_decomposition(A)  # Вызов LU-разложения для матрицы A
     y = forward_substitution(L, b)  # Прямая подстановка для нахождения y
     x = backward_substitution(U, y)  # Обратная подстановка для нахождения x
@@ -106,6 +146,16 @@ def solve_lu(A, b):
 
 
 def solve_system(page, entries):
+    """
+    Решает систему уравнений по выбранному методу (Гаусса или LU-разложение).
+
+    Параметры:
+    - page: объект страницы для отображения сообщений об ошибках
+    - entries: список полей для ввода значений матрицы
+
+    Возвращает:
+    - None
+        """
     if is_valid_input(entries):
         coefficients_matrix = []
         constants_vector = []
@@ -219,6 +269,16 @@ def validate_and_create_matrix_input_page(page, size_value):
 
 
 def create_entries(size, page):
+    """
+    Создает список полей для ввода значений матрицы.
+
+    Параметры:
+    - size: int, размер квадратной матрицы
+    - page: объект страницы для отображения, используется для определения цветовой схемы
+
+    Возвращает:
+    - список списков, содержащий поля для ввода значений матрицы
+    """
     return [[ft.TextField(value="",
                           hint_text="0",
                           hint_style=ft.TextStyle(color='black' if page.theme_mode == 'light' else 'green'),
@@ -231,6 +291,15 @@ def create_entries(size, page):
 
 
 def is_valid_input(entries):
+    """
+    Проверяет, являются ли значения в полях ввода числами.
+
+    Параметры:
+    - entries: список списков, содержащий поля для ввода значений матрицы
+
+    Возвращает:
+    - bool, True если все значения являются числами, False в противном случае
+    """
     for row in entries:
         for entry in row:
             try:
@@ -241,6 +310,15 @@ def is_valid_input(entries):
 
 
 def show_invalid_input_alert(page):
+    """
+    Отображает диалоговое окно с сообщением об ошибке ввода.
+
+    Параметры:
+    - page: объект страницы для отображения
+
+    Возвращает:
+    - None
+    """
     alert_message = "Пожалуйста, введите только числовые значения."
     alert_dialog = ft.AlertDialog(
         title=ft.Text("Ошибка"),
@@ -254,6 +332,15 @@ def show_invalid_input_alert(page):
 
 
 def close_dialog(page):
+    """
+    Закрывает диалоговое окно.
+
+    Параметры:
+    - page: объект страницы для отображения
+
+    Возвращает:
+    - None
+    """
     page.dialog.open = False
     page.update()
 
@@ -311,6 +398,16 @@ def show_solution_page(page: ft.Page, solution, entries):
 
 
 def show_history_page(page: ft.Page, entries):
+    """
+    Отображает страницу с историей решений.
+
+    Параметры:
+    - page: объект страницы для отображения
+    - entries: список полей для ввода значений матрицы
+
+    Возвращает:
+    - None
+    """
     # Очищаем страницу
     page.controls.clear()
     for i, sol in enumerate(solution_history, start=1):
@@ -346,6 +443,15 @@ def show_error_alert(page, message):
 
 
 def create_settings_page(page: ft.Page):
+    """
+    Создает страницу настроек.
+
+    Параметры:
+    - page: объект страницы для отображения
+
+    Возвращает:
+    - None
+    """
     page.controls.clear()
 
     page.add(ft.Text('\n\n\n\n\n\n\n\n\n\n\n'))
@@ -414,6 +520,16 @@ def create_settings_page(page: ft.Page):
 
 
 def change_full_screen_mode(page: ft.Page, mode: str):
+    """
+    Изменяет режим отображения на полноэкранный или оконный.
+
+    Параметры:
+    - page: объект страницы для отображения
+    - mode: str, выбранный режим ("Да" или "Нет")
+
+    Возвращает:
+    - None
+    """
     if mode == 'Да':
         page.window_full_screen = True
     else:
@@ -422,11 +538,36 @@ def change_full_screen_mode(page: ft.Page, mode: str):
 
 
 def change_color(page: ft.Page, color: str):
+    """
+    Изменяет цвет текста на странице.
+
+    Параметры:
+    - page: объект страницы для отображения
+    - color: str, выбранный цвет
+
+    Возвращает:
+    - None
+    """
     page.text_color = color.lower()
     page.update()
 
-#23
+
 def change_theme(page: ft.Page, theme: str):
+    """
+    Изменяет тему страницы.
+
+    Параметры:
+    - page: объект страницы для отображения
+    - theme: str, выбранная тема ("Light" или "Dark")
+
+    Возвращает:
+    - None
+    """
+    if theme.lower() == 'light':
+        page.theme_mode = 'light'
+    else:
+        page.theme_mode = 'dark'
+    page.update()
     if theme.lower() == 'light':
         page.theme_mode = 'light'
     else:
@@ -435,11 +576,31 @@ def change_theme(page: ft.Page, theme: str):
 
 
 def change_rounding(page: ft.Page, rounding: str):
+    """
+    Изменяет количество знаков округления.
+
+    Параметры:
+    - page: объект страницы для отображения
+    - rounding: str, выбранное количество знаков округления
+
+    Возвращает:
+    - None
+    """
     page.rounding = int(rounding)
     page.update()
 
 
 def change_method(page: ft.Page, method: str):
+    """
+    Изменяет метод решения системы уравнений.
+
+    Параметры:
+    - page: объект страницы для отображения
+    - method: str, выбранный метод решения ("Гаусс" или "LU")
+
+    Возвращает:
+    - None
+    """
     if method.lower() == 'гаусс':
         page.method = 'gauss'
     else:
@@ -448,7 +609,27 @@ def change_method(page: ft.Page, method: str):
 
 
 class CustomButton(ft.TextButton):
+    """
+    Класс для создания настраиваемой кнопки.
+
+    Атрибуты:
+    - text: Текст, отображаемый на кнопке.
+    - on_click_action: Действие, выполняемое при нажатии на кнопку.
+    - page: Объект страницы, связанный с кнопкой.
+    - width: Ширина кнопки (по умолчанию 150).
+    - height: Высота кнопки (по умолчанию 50).
+    """
     def __init__(self, text, on_click_action, page, width=150, height=50):
+        """
+        Инициализация настраиваемой кнопки.
+
+        Параметры:
+        - text: Текст, отображаемый на кнопке.
+        - on_click_action: Действие, выполняемое при нажатии на кнопку.
+        - page: Объект страницы, связанный с кнопкой.
+        - width: Ширина кнопки (по умолчанию 150).
+        - height: Высота кнопки (по умолчанию 50).
+        """
         super().__init__(
             text,
             width=width,
