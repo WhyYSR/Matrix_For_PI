@@ -425,7 +425,7 @@ def change_color(page: ft.Page, color: str):
     page.text_color = color.lower()
     page.update()
 
-
+#23
 def change_theme(page: ft.Page, theme: str):
     if theme.lower() == 'light':
         page.theme_mode = 'light'
