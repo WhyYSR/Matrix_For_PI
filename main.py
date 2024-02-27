@@ -1,6 +1,5 @@
 import flet as ft
 import json
-solution_history = []
 
 
 def the_triangular_matrix(A, B, page):
@@ -700,14 +699,13 @@ class CustomButton(ft.TextButton):
         self.page = page
 
 
-translations = load_translations("Translate.json")
-
-
 def main(page: ft.Page):
     """Это основная функция, которая запускает приложение.
     Она принимает один параметр: page (страница, на которой отображается приложение)."""
     page.window_maximized = True
-
+    global translations, solution_history
+    solution_history = []
+    translations = load_translations("Translate.json")
     page.rounding = 3
     page.method = 'gauss'
     page.leng = 'ru'
@@ -717,4 +715,3 @@ def main(page: ft.Page):
 
 if __name__ == "__main__":
     ft.app(main)
-
