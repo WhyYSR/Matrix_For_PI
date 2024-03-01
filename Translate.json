@@ -1,5 +1,9 @@
 {
   "menu": {
+    "Main_page_text_1": {
+      "en": "Solve system of linear equation",
+      "ru": "Решайте СЛАУ"
+    },
     "coefficients_matrix": {
       "en": "Coefficient matrix:",
       "ru": "Матрица коэффициентов:"
@@ -11,6 +15,42 @@
     "final_solve": {
       "en": "Solution of the system of equations",
       "ru": "Решение системы уравнений"
+    },
+    "faq_1": {
+      "en": "What is a system of linear equations (SLAE)?",
+      "ru": "Что такое система линейных алгебраических уравнений (СЛАУ)?"
+    },
+    "faq_2": {
+      "en": "What methods are available for solving SLAE in your program?",
+      "ru": "Какие методы доступны для решения СЛАУ в вашей программе?"
+    },
+    "faq_3": {
+      "en": "When to use LU decomposition?",
+      "ru": "Когда использовать LU-разложение?"
+    },
+    "faq_4": {
+      "en": "When to use the Gaussian elimination method?",
+      "ru": "Когда использовать метод Гаусса?"
+    },
+    "ans_1": {
+      "en": "SLAE stands for a system of linear algebraic equations, which consists of a set of first-degree equations, where each equation represents a linear combination of variables.",
+      "ru": "СЛАУ - это система линейных алгебраических уравнений, которая состоит из набора уравнений первой степени, где каждое уравнение представляет собой линейную комбинацию переменных."
+    },
+    "ans_2": {
+      "en": "In connection with the specificity of the application - for small matrices.",
+      "ru": "В связи с спецификой приложения - при маленьких матрицах."
+    },
+    "ans_3": {
+      "en": "In connection with the specificity of the application - for large dimensionality.",
+      "ru": "В связи с спецификой приложения - при большой размерности."
+    },
+    "ans_4": {
+      "en": "Our program provides several methods for solving SLAE, including the Gaussian elimination method and the LU decomposition method.",
+      "ru": "Наша программа предоставляет несколько методов решения СЛАУ, включая метод Гаусса и метод LU-разложения."
+    },
+    "FAQ_page_text": {
+      "en": "What is a system of linear equations (SLAE)?",
+      "ru": "Что такое система линейных алгебраических уравнений (СЛАУ)?"
     },
     "solve_system": {
       "en": "Solve System",
