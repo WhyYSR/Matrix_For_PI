@@ -1,5 +1,6 @@
 import flet as ft
 import json
+import datetime
 
 
 class MainWindow:
@@ -52,9 +53,7 @@ class MainWindow:
                                     width=100,
                                     height=50)
         history_button = ft.TextButton("History",
-                                       on_click=lambda e: CreateHistoryPage(self.page,
-                                                                            self.current_language,
-                                                                            self.solution_history).
+                                       on_click=lambda e: CreateHistoryPage(self.page).
                                        show_history_page(),
                                        style=ft.ButtonStyle(
                                            color={
@@ -123,10 +122,10 @@ class MainWindow:
                 size_entry.value),
             style=ft.ButtonStyle(
                 color={
-                    ft.MaterialState.DEFAULT: ft.colors.BLACK if self.page.theme_mode == 'light' else ft.colors.WHITE},
+                    ft.MaterialState.DEFAULT: ft.colors.WHITE if self.page.theme_mode == 'light' else ft.colors.BLACK},
                 bgcolor={
                     ft.MaterialState.HOVERED: ft.colors.PURPLE if self.page.theme_mode == 'light' else ft.colors.PURPLE,
-                    "": ft.colors.WHITE if self.page.theme_mode == 'light' else ft.colors.BLACK},
+                    "": ft.colors.BLACK if self.page.theme_mode == 'light' else ft.colors.WHITE},
                 overlay_color=ft.colors.TRANSPARENT,
                 elevation={"pressed": 0, "": 1}),
             width=150,
@@ -135,9 +134,11 @@ class MainWindow:
 
         text_1 = ft.Container(
             alignment=ft.alignment.center,
-            margin=ft.margin.only(left=150, right=25, top=50),
+            margin=ft.margin.only(left=450, top=50),
             content=ft.Row(
-                [ft.Text(self.page.translations['menu']['Main_page_text_1'][self.current_language], size=35)],
+                [ft.Text(self.page.translations['menu']['Main_page_text_1'][self.current_language],
+                         size=35,
+                         weight=ft.FontWeight.W_800)],
                 alignment=ft.MainAxisAlignment.CENTER),
             width=600,
             border=ft.border.all(0, 'white' if self.page.theme_mode == 'light' else "black"),
@@ -147,7 +148,7 @@ class MainWindow:
         )
         pull = ft.Container(
             alignment=ft.alignment.center,
-            margin=ft.margin.only(left=150, right=25, top=75),
+            margin=ft.margin.only(left=450, top=75),
             content=ft.Row([size_entry], alignment=ft.MainAxisAlignment.CENTER),
             width=600,
             border=ft.border.all(1, 'black' if self.page.theme_mode == 'light' else "WHITE"),
@@ -157,7 +158,7 @@ class MainWindow:
         )
         button_container = ft.Container(
             alignment=ft.alignment.center,
-            margin=ft.margin.only(left=150, right=25, top=50),
+            margin=ft.margin.only(left=450, top=50),
             content=ft.Row([submit_button], alignment=ft.MainAxisAlignment.CENTER),
             width=600,
             border=ft.border.all(0, 'white' if self.page.theme_mode == 'light' else "black"),
@@ -305,6 +306,7 @@ class InvalidInputError(MainWindow, Error):
         alert_dialog.open = True
         self.page.update()
 
+
     def close_dialog(self, page):
         """
         Закрывает диалоговое окно.
@@ -355,9 +357,8 @@ class CreateMatrixInputPage(MainWindow):
         save_button = CustomButton(self.page.translations['buttons']['confirm'][self.current_language],
                                    lambda e: SolutionPage(self.page,
                                                           self.size,
-                                                          self.current_language,
-                                                          entries,
-                                                          self.method).
+                                                          entries
+                                                          ).
                                    show_create_matrix_page(entries), self.page)
         back_button = CustomButton(self.page.translations['buttons']['back'][self.current_language],
                                    lambda e: MainWindow.main_window_page(self), self.page)
@@ -392,12 +393,10 @@ class CreateMatrixInputPage(MainWindow):
 
 class SolutionPage(MainWindow):
 
-    def __init__(self, page, size, current_language, entries, method):
+    def __init__(self, page, size, entries):
         super().__init__(page)
         self.size = size
-        self.current_language = current_language
         self.entries = entries
-        self.method = method
 
     def is_valid_input(self, entries):
         for row in entries:
@@ -428,15 +427,21 @@ class SolutionPage(MainWindow):
                   coefficients_matrix)
             print(f"{self.page.translations['menu']['constants_vector'][self.current_language]}:", constants_vector)
             solver = EquationSolver(self.page, self.size, self.current_language, entries)
+            X = None
             if self.method == 'Gauss':
                 A, B = solver.the_triangular_matrix(coefficients_matrix, constants_vector)
-                X = solver.backward_substitution(A, B)
+                if A is not None:
+                    X = solver.backward_substitution(A, B)
+                else:
+                    CreateMatrixInputPage(self.page, self.size).create_matrix_input_page(entries)
             else:
                 X = solver.solve_lu(coefficients_matrix, constants_vector)
             print(f"{self.page.translations['menu']['final_solve'][self.current_language]}:", X)
             for i in range(len(X)):
                 X[i] = round(X[i], self.rounding)
-            self.solution_history.append(X)
+            current_time = datetime.datetime.now()
+            time_executed = current_time.strftime('%H:%M')
+            self.solution_history.append((X, current_time))
             print(self.solution_history)
             self.show_solution_page(X, entries)
         else:
@@ -515,10 +520,10 @@ class EquationSolver(MainWindow):
         - B: список (решение системы уравнений)
         """
         n = len(A)
-
         if len(A) != len(A[0]):
             (InvalidInputError(self.page).
              show_error_alert(self.page.translations['messages']['non_square_matrix_gauss'][self.current_language]))
+            CreateMatrixInputPage(self, n).create_matrix_input_page(self.entries)
             return None, None
 
         det = 1
@@ -602,6 +607,7 @@ class EquationSolver(MainWindow):
 
         return L, U  # Возвращение матриц L и U
 
+
     def forward_substitution(self, L, b):
         """
         Выполняет прямую подстановку.
@@ -643,25 +649,37 @@ class EquationSolver(MainWindow):
 
 
 class CreateHistoryPage(MainWindow):
-    def __init__(self, page, current_language, solution_history):
+    def __init__(self, page):
         super().__init__(page)
-        self.current_language = current_language
-        self.solution_history = solution_history
 
     def show_history_page(self):
         self.page.controls.clear()
 
         MainWindow.create_top_panel(self)
 
-        for i, sol in enumerate(self.solution_history, start=1):
-            solution_text = ft.Row(
-                [ft.Text(f"{self.page.translations['messages']['solution'][self.current_language]} {i}: {sol}",
-                         color='black' if self.page.theme_mode == 'light' else 'green',
-                         size=35)],
-                alignment=ft.MainAxisAlignment.CENTER)
-            self.page.add(solution_text)
+        for entry in self.solution_history:
+            X, time_executed = entry  # Разделение данных решения и времени выполнения
+            solve_text = ', '.join([f"x{i+1} = {el}" for i, el in enumerate(X)])
 
-            # Добавляем кнопку для возврата на предыдущую страницу
+            hist_cont = ft.Container(
+                alignment=ft.alignment.center,
+                margin=ft.margin.only(left=450),
+                content=ft.Row([ft.Icon(name=ft.icons.TIMER,
+                                        color='black' if self.page.theme_mode == 'light' else 'green',
+                                        size=55),
+                                ft.Text(f"{time_executed.strftime('%H:%M')}: \n{solve_text}",
+                                        color='black' if self.page.theme_mode == 'light' else 'green',
+                                        size=35)],
+                               alignment=ft.MainAxisAlignment.CENTER),
+                width=600,
+                border=ft.border.all(0, 'white' if self.page.theme_mode == 'light' else "black"),
+                border_radius=10,
+                bgcolor='white' if self.page.theme_mode == 'light' else 'black',
+                padding=0
+            )
+
+            self.page.add(ft.Text('\n'), hist_cont)
+
         back_button = CustomButton(self.page.translations['buttons']['back'][self.current_language],
                                    lambda e: MainWindow.main_window_page(self),
                                    self.page)
